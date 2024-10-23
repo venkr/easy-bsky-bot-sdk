@@ -66,6 +66,10 @@ const mapBskyAuthorToAuthor = (bskyAuthor: AppBskyFeedDefs.PostView["author"]): 
   };
 };
 
+const getUrl = (id: string, author: string) => {
+  return `https://cdn.bsky.app/img/feed_fullsize/plain/${author}/${id}`;
+};
+
 const mapBskyFeedPostToPost = (bskyFeedPost: AppBskyFeedDefs.PostView): Omit<Post, "isRepost"> => {
   const record: any = bskyFeedPost.record;
   if (record.$type !== "app.bsky.feed.post") throw new Error(`unexpected post record type: ${record.$type}`);
@@ -81,6 +85,16 @@ const mapBskyFeedPostToPost = (bskyFeedPost: AppBskyFeedDefs.PostView): Omit<Pos
         root: { uri: record.reply.root.uri, cid: record.reply.root.cid },
       }
     : {};
+
+  let embeds: string[] = [];
+  if (record.embed) {
+    if (record.embed.$type === "app.bsky.embed.images") {
+      for (const image of record.embed.images) {
+        if (!image.image.ref.$link || !bskyFeedPost.author.did) continue;
+        embeds.push(getUrl(image.image.ref.$link, bskyFeedPost.author.did));
+      }
+    }
+  }
 
   // note that we have no way of knowing whether or not this is a repost --
   // it's up to the caller to set that property
@@ -102,6 +116,7 @@ const mapBskyFeedPostToPost = (bskyFeedPost: AppBskyFeedDefs.PostView): Omit<Pos
     text,
     ...replyDetails,
     mentions: extractMentionsFromFacets(record.facets),
+    embeds: embeds.length > 0 ? embeds : undefined,
   };
 };
 

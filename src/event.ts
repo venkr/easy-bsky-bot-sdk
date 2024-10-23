@@ -22,6 +22,10 @@ const extractUser = (notif: Notif): User => {
   };
 };
 
+const getUrl = (id: string, author: string) => {
+  return `https://cdn.bsky.app/img/feed_fullsize/plain/${author}/${id}`;
+};
+
 // TODO handle images, embeds, quotes, etc
 const extractPost = (notif: Notif): Post => {
   // TODO get rid of any and use a type guard
@@ -30,6 +34,17 @@ const extractPost = (notif: Notif): Post => {
   if (record.$type !== "app.bsky.feed.post") throw new Error(`failed to extract post of type ${record.type}}`);
   if (!isUri(notif.uri)) throw new Error(`invalid uri: ${record.uri}`);
   if (!isCid(notif.cid)) throw new Error(`invalid cid: ${record.cid}`);
+
+  let embeds: string[] = [];
+  if (record.embed) {
+    if (record.embed.$type === "app.bsky.embed.images") {
+      for (const image of record.embed.images) {
+        if (!image.image.ref.$link || !notif.author.did) continue;
+        embeds.push(getUrl(image.image.ref.$link, notif.author.did));
+      }
+    }
+  }
+
   const replyDetails = record.reply
     ? {
         parent: {
@@ -48,6 +63,8 @@ const extractPost = (notif: Notif): Post => {
     cid: notif.cid,
     text: record.text,
     mentions: extractMentionsFromFacets(record.facets),
+    embeds: embeds.length > 0 ? embeds : undefined,
+    ...replyDetails,
   };
 };
 

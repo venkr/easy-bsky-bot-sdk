@@ -51,6 +51,7 @@ export type Post = {
   uri: Uri;
   cid: Cid;
   mentions: Did[];
+  embeds?: string[];
   isRepost?: boolean;
   parent?: PostReference;
   root?: PostReference;
