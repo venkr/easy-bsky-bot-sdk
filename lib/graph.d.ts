@@ -3,20 +3,20 @@ import { Did, User, UserIdentifier } from "./types";
 export declare const getFollowers: ({ agent, actor, limit, cursor, }: {
     agent: BskyAgent;
     actor: UserIdentifier;
-    limit?: number | undefined;
-    cursor?: string | undefined;
+    limit?: number;
+    cursor?: string;
 }) => Promise<{
     items: User[];
-    cursor?: string | undefined;
+    cursor?: string;
 }>;
 export declare const getFollows: ({ agent, actor, limit, cursor, }: {
     agent: BskyAgent;
     actor: UserIdentifier;
-    limit?: number | undefined;
-    cursor?: string | undefined;
+    limit?: number;
+    cursor?: string;
 }) => Promise<{
     items: User[];
-    cursor?: string | undefined;
+    cursor?: string;
 }>;
 export declare const follow: ({ agent, did }: {
     agent: BskyAgent;

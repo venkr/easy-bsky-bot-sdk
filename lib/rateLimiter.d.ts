@@ -8,4 +8,4 @@ export declare class RateLimiter {
     private _drainQueue;
     run<F extends () => any>(fn: F): Promise<ReturnType<F>>;
 }
-export declare const rateLimit: <F extends (...args: any[]) => any>(fn: F, rateLimiter: RateLimiter) => (...args: Parameters<F>) => Promise<ReturnType<F>>;
+export declare const rateLimit: <F extends (...args: any[]) => any>(fn: F, rateLimiter: RateLimiter) => ((...args: Parameters<F>) => Promise<ReturnType<F>>);

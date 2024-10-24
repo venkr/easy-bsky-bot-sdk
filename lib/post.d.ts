@@ -20,11 +20,11 @@ export declare const getPostParents: (params: {
 export declare const getUserPosts: ({ agent, identifier, limit, cursor, }: {
     agent: BskyAgent;
     identifier: UserIdentifier;
-    limit?: number | undefined;
-    cursor?: string | undefined;
+    limit?: number;
+    cursor?: string;
 }) => Promise<{
     items: Post[];
-    cursor?: string | undefined;
+    cursor?: string;
 }>;
 export type PostParams = {
     text?: string;

@@ -7,5 +7,5 @@ export declare function makeFetchAll<T, P extends FetchParams>(fetcher: (params:
 }>, rateLimiter?: RateLimiter): (params: P) => Promise<T[]>;
 export declare const fetchAll: <T, P extends FetchParams>(fetcher: (params: P) => Promise<{
     items: T[];
-    cursor?: string | undefined;
+    cursor?: string;
 }>, params: P, rateLimiter?: RateLimiter) => Promise<T[]>;
